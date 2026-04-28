@@ -173,18 +173,6 @@ export default function SideBar({ onCollectionChange, activeCollection = "all-po
 
         <div className="down flex flex-col gap-2">
           <ModeBox iscolumn={true} isSidebarOpen={isOpen} />
-          <Button
-            onClick={() => handleButtonClick("settings")}
-            isActive={activeCollection === "settings"}
-            tooltip="Settings"
-          >
-            <Settings className="w-5 h-5 shrink-0" />
-            <div className={`ml-1.5 transition-all duration-300 whitespace-nowrap overflow-hidden
-              ${isOpen? 'opacity-100 max-w-full' : 'opacity-0 max-w-0 sm:opacity-100 sm:max-w-full max-sm:opacity-0'}
-            `}>
-              Settings
-            </div>
-          </Button>
         </div>
       </aside>
 
