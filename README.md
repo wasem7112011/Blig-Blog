@@ -15,8 +15,7 @@ All data is stored in localStorage - no backend or database required.
 - **Days Left Counter**: See how many days remain before trash items are deleted
 
 ## 🚀 Live Demo
-
-[[Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/blig-blog)
+https://blig-blog-git-main-wasemgecob-7037s-projects.vercel.app/
 
 ## 🛠️ Tech Stack
 
@@ -65,12 +64,20 @@ npm start
 │       └── sidebarmainbutton.tsx # Sidebar navigation button
 ├── public/                   # Static assets
 ├── package.json
-└── README.md🎯 How It Works
-Create Posts: Click "New Post" to add content to any collectionOrganize: Posts are automatically sorted into collectionsSearch: Use the search bar to filter posts in real-timeDelete: Move posts to trash - they auto-delete after 10 daysTheme: Switch between dark and light mode - syncs across all tabsPrivacy: All data stays in your browser's localStorage🚢 Deployment
+└── README.md
+
+🎯 How It Works
+Create Posts: Click "New Post" to add content to any collectionOrganize: Posts are automatically sorted into collectionsSearch: Use the search bar to filter posts in real-timeDelete: Move posts to trash - they auto-delete after 10 daysTheme: Switch between dark and light mode - syncs across all tabsPrivacy: All data stays in your browser's localStorage
+
+🚢 Deployment
 Deploy to Vercel
 The easiest way to deploy:Click the "Deploy" button above, orPush to GitHub and import to VercelVercel will auto-detect Next.js and deployNo environment variables needed.Deploy to Other Platforms
-This is a standard Next.js app and works on:NetlifyRailwayRenderCloudflare PagesBuild command: npm run buildOutput directory: .next🔒 Data Privacy
-All posts are stored in your browser's localStorage. This means:✅ Your data never leaves your device✅ No account required✅ Works completely offline⚠️ Clearing browser data will delete all posts⚠️ Each device/browser has separate data📝 Customization
+This is a standard Next.js app and works on:NetlifyRailwayRenderCloudflare PagesBuild command: npm run buildOutput directory: .next
+
+🔒 Data Privacy
+All posts are stored in your browser's localStorage. This means:✅ Your data never leaves your device✅ No account required✅ Works completely offline⚠️ Clearing browser data will delete all posts⚠️ Each device/browser has separate data
+
+📝 Customization
 Change Auto-Delete Days
 Edit app/page.tsx:tsconst TRASH_DAYS = 10; // Change to your preferred numberAdd New Collections
 Update the PostType in app/page.tsx and add buttons in components/sidebar.tsx.Modify Theme Colors
@@ -78,7 +85,9 @@ Edit CSS variables in app/globals.css:css.dark {
   --bg-primary: #0f0f0f;
   --text: #ffffff;
   /* etc */
-}🤝 Contributing
+}
+
+🤝 Contributing
 Contributions are welcome! Feel free to:Fork the repositoryCreate a feature branch: git checkout -b feature-nameCommit your changes: git commit -m 'Add feature'Push to the branch: git push origin feature-nameOpen a Pull Request📄 License
 MIT License - you can use this project for personal or commercial purposes.🙏 Acknowledgments
 Built with Next.jsStyled with Tailwind CSSIcons from LucideIf you like this project, give it a ⭐ on GitHub!
