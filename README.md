@@ -34,7 +34,7 @@ https://blig-blog-git-main-wasemgecob-7037s-projects.vercel.app/
 
 ### Setup
 # 1. Clone the repository
-git clone [https://github.com/your-username/blig-blog.git](https://github.com/wasem7112011/Blig-Blog.git)
+git clone https://github.com/wasem7112011/Blig-Blog.git
 cd blig-blog
 
 # 2. Install dependencies
