@@ -1,65 +1,158 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+import Head from "./components/header";
+import SideBar from "./components/sidebar";
+import Post from "./components/post";
+import { useState, useMemo, Suspense, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+
+type PostType = {
+  id: string;
+  title: string;
+  content: string;
+  collection: 'personal' | 'ideas' | 'diary' | 'work' | 'all-posts' | 'trash';
+  createdAt: string;
+  deletedAt?: string;
+}
+
+const welcomePost: PostType = {
+  id: 'welcome-1',
+  title: 'Welcome To Blig Blog',
+  content: `Welcome to Blig Blog! 🎉
+
+  This is your personal space to write thoughts, daily logs, and projects without the noise.
+
+  **What can you do here?**
+
+  ✨ **Personal** - Write your private thoughts
+  💡 **Ideas** - Capture ideas before they fly away  
+  📖 **Diary** - Log your daily entries
+  💼 **Work** - Organize tasks and work notes
+
+  **How to start?**
+  1. Click any Collection from the sidebar
+  2. Write your first post
+  3. Everything auto-saves
+
+  No complexity. No algorithms. No followers. Just you and your thoughts.
+
+  Start now and write the first thing on your mind 👇`,
+  collection: 'personal',
+  createdAt: new Date().toISOString()
+}
+
+const POSTS_KEY = 'blig_posts';
+const TRASH_DAYS = 10;
+
+function cleanOldTrash(posts: PostType[]): PostType[] {
+  const now = new Date();
+  const tenDaysAgo = now.getTime() - (TRASH_DAYS * 24 * 60 * 60 * 1000);
+
+  return posts.filter(post => {
+    if (post.collection!== 'trash') return true;
+    if (!post.deletedAt) return false;
+    const deletedTime = new Date(post.deletedAt).getTime();
+    return deletedTime > tenDaysAgo;
+  });
+}
+
+function MainContent(){
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [posts, setPosts] = useState<PostType[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const storedPosts = localStorage.getItem(POSTS_KEY);
+
+    if (!storedPosts) {
+      const initialPosts = [welcomePost];
+      setPosts(initialPosts);
+      localStorage.setItem(POSTS_KEY, JSON.stringify(initialPosts));
+    } else {
+      let loadedPosts: PostType[] = JSON.parse(storedPosts);
+      const cleanedPosts = cleanOldTrash(loadedPosts);
+      if (cleanedPosts.length!== loadedPosts.length) {
+        localStorage.setItem(POSTS_KEY, JSON.stringify(cleanedPosts));
+      }
+      setPosts(cleanedPosts);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
+    }
+  }, [posts]);
+
+  const currentCollection = searchParams.get('collection') || 'all-posts';
+
+  const filteredPosts = useMemo(() => {
+    let filtered = posts;
+
+    if (currentCollection === 'all-posts') {
+      filtered = filtered.filter(p => p.collection!== 'trash');
+    } else {
+      filtered = filtered.filter(p => p.collection === currentCollection);
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(p =>
+        p.title.toLowerCase().includes(query) ||
+        p.content.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [posts, currentCollection, searchQuery]);
+
+  function handleCollectionChange(collection: string) {
+    setSearchQuery('');
+    router.push(`?collection=${collection}`, { scroll: false });
+  }
+
+  return(
+    <div className="mainPage flex flex-1 h-screen">
+      <SideBar onCollectionChange={handleCollectionChange} activeCollection={currentCollection} />
+
+      <main className="flex-1 flex flex-col bg-(--bg-primary) min-h-0">
+        <Head onSearch={setSearchQuery} />
+
+        <div className="content m-2 p-4 rounded-xl bg-(--sidebar) flex-1 min-h-0 overflow-y-auto">
+          <h1 className="text-3xl font-bold text-(--text) mb-4 capitalize">
+            {searchQuery? `Search: "${searchQuery}"` :
+            currentCollection === 'all-posts'? 'All Posts' : currentCollection}
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+          {currentCollection === 'trash' && filteredPosts.length > 0 && (
+            <div className="mb-6 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-600 text-sm capitalize">
+              ⚠️ Posts in trash will be permanently deleted after 10 days
+            </div>
+          )}
+
+          <div className="grid gap-4 grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 2xl:grid-cols-6">
+            {filteredPosts.length === 0? (
+              <p className="text-(--text-muted)">
+                {searchQuery? `No results for "${searchQuery}"` :
+                currentCollection === 'trash'? 'Trash is empty' : 'No posts in this collection'}
+              </p>
+            ) : (
+              filteredPosts.map(post => (
+                <Post key={post.id} {...post} />
+              ))
+            )}
+          </div>
         </div>
       </main>
     </div>
+  );
+}
+
+export default function MainPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+      <MainContent />
+    </Suspense>
   );
 }
