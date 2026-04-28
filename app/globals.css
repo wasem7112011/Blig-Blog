@@ -7,9 +7,11 @@
   --hovered: #f0f5fd;
   --line: #bdc0ca;
   --text: #a9afbb;
+  --text-muted: #6b6b6b;
 }
 
 .dark {
+  --text-muted: #a1a1a1;
   --search-box: #1E2025;
   --bg-primary: #111315;
   --sidebar: #16181D;
