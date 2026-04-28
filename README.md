@@ -15,7 +15,7 @@ All data is stored in localStorage - no backend or database required.
 - **Days Left Counter**: See how many days remain before trash items are deleted
 
 ## 🚀 Live Demo
-https://blig-blog-git-main-wasemgecob-7037s-projects.vercel.app/
+https://blig-blog.vercel.app/
 
 ## 🛠️ Tech Stack
 
