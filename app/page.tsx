@@ -131,7 +131,7 @@ function MainContent(){
             </div>
           )}
 
-          <div className="grid gap-4 grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 2xl:grid-cols-6">
+          <div className="grid gap-4 grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 2xl:grid-cols-4">
             {filteredPosts.length === 0? (
               <p className="text-(--text-muted)">
                 {searchQuery? `No results for "${searchQuery}"` :
