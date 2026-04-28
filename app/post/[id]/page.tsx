@@ -97,7 +97,7 @@ export default function PostPage() {
               {post.collection}
             </span>
             <span className="text-(--text) text-sm font-bold">
-              {new Date(post.createdAt).toLocaleDateString('ar-EG', {
+              {new Date(post.createdAt).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
